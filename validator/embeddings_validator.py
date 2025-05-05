@@ -4,7 +4,7 @@ import logging
 from pathlib import Path
 from typing import Optional, List
 
-from universal_behavioral_modeling_challenge.validator.utils import (
+from validator.utils import (
     _err_msg_if_checks_fail,
 )
 
