@@ -19,11 +19,13 @@ The objective of this challenge is to develop Universal Behavioral Profiles base
 
 ### Open Tasks
 - **Churn Prediction:** Binary classification into 1: user will churn or 0: user will not churn. Churn task is performed on a subset of active users with at least one `product_buy` event in history (data available for the participants)
+- will churn, i.e., make no purchases within the next 14 days.
 Task name: `churn`
 - **Categories Propensity:** Multi-label classification into one of 100 possible labels. The labels represent the 100 most often purchase product categories.
 Task name: `propensity_category`
 - **Product Propensity:** Multi-label classification into one of 100 possible labels. The labels represent the 100 most often purchase products in train target data.
 Task name: `propensity_sku`
+will predict products which a user is most likely to purchase within the next 14 days, from a predefined subset of items.
 
 ### Hidden Tasks
 In addition to the open tasks, the challenge includes hidden tasks, which remain undisclosed during the competition. The purpose of these tasks is to ensure that submitted Universal Behavioral Profiles are capable of generalization rather than being fine-tuned for specific known objectives. Similar to the open tasks, the hidden tasks focus on predicting user behavior based on the submitted representations, but they introduce new contexts that participants are not explicitly optimizing for.

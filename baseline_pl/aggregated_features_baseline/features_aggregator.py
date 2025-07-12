@@ -39,17 +39,18 @@ def get_top_values(
         events
         .select(
             pl.col(columns)
-        ).unpivot()
+        ).unpivot() # go from wide to tall to group by column and column value
         .group_by(pl.all()) # variable and value
-        .len()
+        .len() # take number of rows
         .sort(["variable","len"], descending=[False, True])
+        # sort value by size for each variable
         .group_by("variable")
         .head(top_n)
+        # take top_n for each variable
         .select("variable","value")
         .group_by("variable").agg("value")
         .iter_rows()        
-            #.top_k_by("count",top_n)
-        ##.to_dict(as_series=False)
+
     )
     # https://stackoverflow.com/a/76182137
     return top_values
@@ -155,10 +156,10 @@ class FeaturesAggregator:
         """
         if event_type is EventTypes.SEARCH_QUERY:
             return QueryFeaturesCalculator(
-                query_column=QUERY_COLUMN, single_query=df.select(QUERY_COLUMN).first()
+                query_column=QUERY_COLUMN, single_query=df.select(QUERY_COLUMN).item(0,0)
             )
         else:
-            max_date = df.select("timestamp").max()
+            max_date = df.select("timestamp").max().item(0,0)
             logger.info(f"max_date: {max_date}")
             unique_values = get_top_values(df, columns, self.top_n)
             return StatsFeaturesCalculator(
@@ -219,7 +220,7 @@ class FeaturesAggregator:
     def merge_features(
         self,
     ) -> Tuple[np.ndarray, np.ndarray]:
-        """
+        """single_query=df.select(QUERY_COLUMN).item(0,0)
         Merges feature arrays for different event types into embeddings. Computes client ids by collecting all keys of attribute dictionary.
         """
         client_ids = []

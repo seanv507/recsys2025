@@ -1,3 +1,4 @@
+import datetime
 import numpy as np
 import pandas as pd
 import polars as pl
@@ -97,7 +98,7 @@ class QueryFeaturesCalculator(Calculator):
         quantized_query_representations = np.stack(
             [
                 parse_to_array(string_representation_of_vector=v)
-                for v in events[self.query_column].values
+                for v in events.get_column(self.query_column).to_numpy()
             ],
             axis=0,
         )
@@ -114,7 +115,7 @@ class StatsFeaturesCalculator(Calculator):
     def __init__(
         self,
         num_days: List[int],
-        max_date: pl.Datetime,
+        max_date: datetime.datetime,
         columns: List[str],
         unique_values: dict[str, list],
     ):
@@ -166,5 +167,4 @@ class StatsFeaturesCalculator(Calculator):
                 
                 features[pointer : pointer + len(self._unique_values[column])] = [counts.get(val,0) for val in self._unique_values[column]]
                 pointer += len(self._unique_values[column])
-                breakpoint()
         return features
